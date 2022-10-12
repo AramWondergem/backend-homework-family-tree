@@ -1,0 +1,7 @@
+-------------------------------------------------------------------------------
+Test set: org.wonderboom.PersonTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.366 s <<< FAILURE! - in org.wonderboom.PersonTest
+when_SiblingIsAdded_Expect_PersonAddedIsSameAsSiblingReturned  Time elapsed: 0.324 s  <<< ERROR!
+java.lang.StackOverflowError
+
