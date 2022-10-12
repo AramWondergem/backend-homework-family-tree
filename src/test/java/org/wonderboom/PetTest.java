@@ -9,7 +9,7 @@ class PetTest {
 
     void when_OwnerIsAdded_Expect_PetsOfOwnerContainThisPetAndTheOwnerOfthisPetisOwner (){
         //Arrange
-        Person p = new Person("Hans");
+        Person p = new Person("Hans","Romy","Smit",16,'v');
         Pet pet = new Pet("snah");
         //Act
         pet.setOwner(p);
@@ -22,7 +22,7 @@ class PetTest {
 
     void when_petIsRemoved_Expect_ThisPetsNotContainPetANDOwnerOfPetIsNull() {
         //Arrange
-        Person p = new Person("Hans");
+        Person p = new Person("Hans","Romy","Smit",16,'v');
         Pet pet = new Pet("snah");
         pet.setOwner(p);
         //Act

@@ -1,5 +1,6 @@
 package org.wonderboom;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,7 @@ public class Person {
     private List<Person> children = new ArrayList<>();
     private List<Pet> pets = new ArrayList<>();
 
-    public Person(String name) {
-        this.name=name;
-    }
+
 
     public Person(String name, String lastname, int age, char sex) {
         this.name = name;
@@ -36,34 +35,121 @@ public class Person {
     // Own methods
     public void addParents(Map<String, List<Person>> parents) {
         if (parents.containsKey("mother")) {
-            this.mothers.addAll(parents.get("mother"));
+            for (Person p : parents.get("mother")) {
+                if (!this.containsParent(p)) {
+                    this.mothers.add(p);
+                } else {
+                    System.out.println(p.getName() + " is already your one of your parents");
+                }
+            }
         } else if (parents.containsKey("father")) {
-            this.fathers.addAll(parents.get("father"));
+            for (Person p : parents.get("father")) {
+                if (!this.containsParent(p)) {
+                    this.fathers.add(p);
+                }else {
+                    System.out.println(p.getName() + " is already your one of your parents");
+                }
+            }
+        }
+
+        for (List<Person> list : parents.values()) {
+            for (Person p : list) {
+                if (!p.containsChild(this)) {
+                    p.addChild(this);
+                }
+            }
         }
     }
 
-    public void addChild(Person child) {
-        this.children.add(child);
+    public void addOneParent(Person parent) {
+        if (!this.containsParent(parent)) {
+            if (parent.getSex()=='m') {
+                fathers.add(parent);
+            } else if (parent.getSex()=='v') {
+                mothers.add(parent);
+            } else {
+                System.out.println("Give " + parent.getName() + " a sex, otherwise she will not be added as a parent of " + this.getName());
+            }
+
+            if (!parent.containsChild(this)) {
+                parent.addChild(this);
+            }
+        }
+
     }
 
+    public boolean containsParent(Person parent) {
+        boolean placeholderContainsParent = false;
+        for (Person p : fathers) {
+            if (p == parent) {
+                placeholderContainsParent = true;
+            }
+        }
+        for (Person p : mothers) {
+            if (p == parent) {
+                placeholderContainsParent = true;
+            }
+        }
+        return placeholderContainsParent;
+    }
+
+    public void addChild(Person child) {
+        if (!this.containsChild(child)) {
+            this.children.add(child);
+        } else {
+            System.out.println(child.getName() + " is already a child of " + this.name);
+        }
+        if (!child.containsParent(this)) {
+            child.addOneParent(this);
+        }
+    }
+
+    public boolean containsChild(Person child) {
+        boolean placeholderContainsChild = false;
+        for (Person p : children) {
+            if (p == child) {
+                placeholderContainsChild = true;
+            }
+        }
+        return placeholderContainsChild;
+    }
+
+
     public void addPet(Pet pet) {
-        if(!pets.contains(pet)) {
+        if (!pets.contains(pet)) {
             this.pets.add(pet);
             pet.setOwner(this);
         }
     }
 
     public void removePet(Pet pet) {
-        if (this.pets.contains(pet)){
+        if (this.pets.contains(pet)) {
             this.pets.remove(pet);
         }
-        if (pet.getOwner()!=null&&pet.getOwner().equals(this)){
+        if (pet.getOwner() != null && pet.getOwner().equals(this)) {
             pet.removeOwner();
         }
     }
 
     public void addSibling(Person sibling) {
-        this.sibilings.add(sibling);
+        if (!this.containsSibling(sibling)) {
+            this.sibilings.add(sibling);
+        } else {
+            System.out.println(sibling.getName() + " is already a sibling of " + this.name);
+        }
+        if (!sibling.containsSibling(this)) {
+            sibling.addSibling(this);
+        }
+    }
+
+    public boolean containsSibling(Person sibling) {
+        boolean placeholderContainsSibling = false;
+        for (Person p : sibilings) {
+            if (p == sibling) {
+                placeholderContainsSibling = true;
+            }
+        }
+        return placeholderContainsSibling;
     }
 
     public List<Person> getGrandChildren() {
